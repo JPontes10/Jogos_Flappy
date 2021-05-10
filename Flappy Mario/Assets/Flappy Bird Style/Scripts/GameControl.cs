@@ -7,7 +7,7 @@ public class GameControl : MonoBehaviour
 {
 	public static GameControl instance;			//A reference to our game control script so we can access it statically.
 	public Text scoreText;						//A reference to the UI text component that displays the player's score.
-	public GameObject GameOvertext;				//A reference to the object that displays the text which appears when the player dies.
+	public GameObject GameOverText;				//A reference to the object that displays the text which appears when the player dies.
 
 	private int score = 0;						//The player's score.
 	public bool gameOver = false;				//Is the game over?
@@ -50,7 +50,7 @@ public class GameControl : MonoBehaviour
 	public void BirdDied()
 	{
 		//Activate the game over text.
-		GameOvertext.SetActive (true);
+		GameOverText.SetActive (true);
 		//Set the game to be over.
 		gameOver = true;
 	}
