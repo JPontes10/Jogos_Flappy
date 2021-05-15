@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class ColumnPool : MonoBehaviour 
 {
@@ -17,23 +18,25 @@ public class ColumnPool : MonoBehaviour
 
 	private float timeSinceLastSpawned;
 
+	private int lastNum;
+
+
 
 	void Start()
 	{
 		timeSinceLastSpawned = 0f;
-
-		//Initialize the columns collection.
+		
 		columns = new GameObject[columnPoolSize];
-		//Loop through the collection... 
+		 
 		for(int i = 0; i < columnPoolSize; i++)
 		{
-			//...and create the individual columns.
+			
 			columns[i] = (GameObject)Instantiate(columnPrefab, objectPoolPosition, Quaternion.identity);
 		}
 	}
 
 
-	//This spawns columns as long as the game is not over.
+
 	void Update()
 	{
 		timeSinceLastSpawned += Time.deltaTime;
@@ -42,19 +45,62 @@ public class ColumnPool : MonoBehaviour
 		{	
 			timeSinceLastSpawned = 0f;
 
-			//Set a random y position for the column
 			float spawnYPosition = Random.Range(columnMin, columnMax);
-
-			//...then set the current column to that position.
 			columns[currentColumn].transform.position = new Vector2(spawnXPosition, spawnYPosition);
-
-			//Increase the value of currentColumn. If the new size is too big, set it back to zero
 			currentColumn ++;
 
 			if (currentColumn >= columnPoolSize) 
 			{
 				currentColumn = 0;
 			}
+
+			if(GameControl.instance.score < 100  && (GameControl.instance.score % 10 == 0)){
+				RandomPowerUp(GameControl.instance.score);
+			}
+		}
+
+		if(Input.GetKeyDown (KeyCode.Escape)){
+			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex -1);
 		}
 	}
+
+	void RandomPowerUp(int score){
+		//float auxSpawnRate = spawnRate;
+		//float auxScrollingSpeed = GameControl.instance.scrollSpeed;
+		int num = GetRandomNum(lastNum);
+		switch(num){
+			case 1: SpeedPowerUp() ;
+			break;
+			case 2: ;
+			break;
+			case 3: ;
+			break;
+			case 4: ;
+			break;
+		}
+	}
+
+	int GetRandomNum(int lastNum){
+        int randNumber = 0;
+		do{
+			lastNum = randNumber;
+			Random rnd = new Random();
+			randNumber = Random.Range(1, 2);
+		}while(randNumber == lastNum);
+		return randNumber;
+	}
+
+
+	void SpeedPowerUp(){
+		//GameControl.instance.scrollSpeed -= 5f; 
+		//Debug.Log("scrollSpeed = " + GameControl.instance.scrollSpeed);
+		Debug.Log(spawnRate);
+		if(spawnRate > 2f){
+			spawnRate = spawnRate - 0.5f;
+		}else if(spawnRate > 1f){
+			spawnRate = spawnRate - 0.1f;
+		}
+		Debug.Log(spawnRate);
+	}
+
 }
